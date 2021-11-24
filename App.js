@@ -1,27 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Animated} from 'react-native';
+import { StyleSheet, Text, View, Animated, Dimensions} from 'react-native';
 
 export default function App() {
   const [ bpmValue, setBpmValue ] = useState(80);
-  const deg = useRef(new Animated.Value(0)).current;
+  const distance = useRef(new Animated.Value(0)).current;
   const [speed, setSpeed ] = useState(1000)
 
-  let degInterpolated = deg.interpolate(
+  var width = Dimensions.get('window').width;
+
+  let degInterpolated = distance.interpolate(
     {
-      inputRange:[0,180],
-      outputRange:['0deg', '180deg']
+      inputRange:[0,100],
+      outputRange:['0%', '100%']
     }
   )
   useEffect(()=>{
     Animated.loop( 
       Animated.sequence([
-        Animated.timing(deg,{
-          toValue:180,
+        Animated.timing(distance,{
+          toValue:width*0.8-20,
           duration: speed,
           useNativeDriver: false
         }),
-        Animated.timing(deg,{
+        Animated.timing(distance,{
           toValue:0,
           duration: speed,
           useNativeDriver: false
@@ -35,9 +37,9 @@ export default function App() {
       <View style={styles.display}>
           <Text style={styles.valueText}>{bpmValue}</Text>
           <Text style={[styles.valueText, {fontSize: 20}]}>Bpm</Text>
-          <Animated.View style={[styles.markAxios,{transform:[{rotate: degInterpolated}]}]}>
-            <View style={styles.mark}></View>
-          </Animated.View>
+          <View style={[styles.markAxios]}>
+            <Animated.View style={[styles.mark,{transform:[{translateX: distance}]}]}></Animated.View>
+          </View>
       </View>
       <View style={styles.actionsWrapper}></View>
       <StatusBar style="auto" />
@@ -54,9 +56,9 @@ const styles = StyleSheet.create({
     
   },
   display:{
-    width: '80vw',
+    width: '80%',
     maxWidth: 800,
-    height: 100,
+    height: 220,
     marginTop:50,
     borderTopLeftRadius: 200,
     borderTopRightRadius: 200,
@@ -70,24 +72,24 @@ const styles = StyleSheet.create({
     color: '#737373'
   },
   actionsWrapper:{
-    
     backgroundColor: '#fff',
-    width: '100%'
-    
+    width: '100%' 
   },
   markAxios:{
     width: '100%',
     height: 20,
-    bottom: 0,
-    left: 0,
+    bottom: -10,
+    left: -10,
     position: 'absolute',
-    backgroundColor: '#fff',
-    zIndex:100,
   },
   mark:{
-    width: 20,
-    height: 20,
-    borderRadius: 20/2,
-    backgroundColor: '#255255',
+    width: 30,
+    height: 30,
+    borderRadius: 30/2,
+    backgroundColor: '#232E97',
+    borderColor: '#737373',
+    borderWidth: 1,
+    shadowColor: 'white',
+    elevation: 5
   }
 });
