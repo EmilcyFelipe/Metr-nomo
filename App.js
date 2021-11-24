@@ -1,16 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useRef, useState } from 'react';
+import React, {useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Animated} from 'react-native';
 
 export default function App() {
   const [ bpmValue, setBpmValue ] = useState(80);
+  const deg = useRef(new Animated.Value(0)).current;
+  const [speed, setSpeed ] = useState(1000)
+
+  let degInterpolated = deg.interpolate(
+    {
+      inputRange:[0,180],
+      outputRange:['0deg', '180deg']
+    }
+  )
+  useEffect(()=>{
+    Animated.loop( 
+      Animated.sequence([
+        Animated.timing(deg,{
+          toValue:180,
+          duration: speed,
+          useNativeDriver: false
+        }),
+        Animated.timing(deg,{
+          toValue:0,
+          duration: speed,
+          useNativeDriver: false
+        })
+      ])
+      ).start()
+  },[])
  
   return (
     <View style={styles.container}>
       <View style={styles.display}>
           <Text style={styles.valueText}>{bpmValue}</Text>
           <Text style={[styles.valueText, {fontSize: 20}]}>Bpm</Text>
-          <Animated.View style={styles.markAxios}>
+          <Animated.View style={[styles.markAxios,{transform:[{rotate: degInterpolated}]}]}>
             <View style={styles.mark}></View>
           </Animated.View>
       </View>
@@ -20,6 +45,7 @@ export default function App() {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,12 +54,12 @@ const styles = StyleSheet.create({
     
   },
   display:{
-    width: '80%',
+    width: '80vw',
     maxWidth: 800,
-    height: 200,
+    height: 100,
     marginTop:50,
-    borderTopLeftRadius: 400,
-    borderTopRightRadius: 400,
+    borderTopLeftRadius: 200,
+    borderTopRightRadius: 200,
     borderColor: '#737373',
     borderWidth: 10,
     alignItems: 'center',
@@ -50,13 +76,13 @@ const styles = StyleSheet.create({
     
   },
   markAxios:{
-    width: '50%',
-    height: 10,
+    width: '100%',
+    height: 20,
     bottom: 0,
     left: 0,
     position: 'absolute',
     backgroundColor: '#fff',
-    zIndex:100
+    zIndex:100,
   },
   mark:{
     width: 20,
