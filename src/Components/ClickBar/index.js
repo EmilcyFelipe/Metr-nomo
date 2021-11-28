@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
 
@@ -27,9 +27,10 @@ export default function ClickBar(){
                     <View style={styles.boxAction}><Text style={styles.textBoxAction}>-</Text></View>
                 </TouchableOpacity>
                 <View style={styles.clicksWrapper}>
-                    <Text style={styles.textClicks}>{currentClicks-1}</Text>
-                    <Text style={styles.textClicks}>{currentClicks}</Text>
-                    <Text style={styles.textClicks}>{currentClicks+1}</Text>
+
+                    {currentClicks===1?<Text>  </Text>:(<Text style={styles.textClicks}>{(currentClicks-1)<10?'0'+(currentClicks-1):(currentClicks-1)}</Text>)}
+                    <Text style={styles.textClicks}>{currentClicks<10?'0'+currentClicks:currentClicks}</Text>
+                    <Text style={styles.textClicks}>{(currentClicks+1)<10?'0'+(currentClicks+1):(currentClicks+1)}</Text>
                 </View>
                 <TouchableOpacity onPress={addClick}>
                     <View style={styles.boxAction}><Text style={styles.textBoxAction}>+</Text></View>
