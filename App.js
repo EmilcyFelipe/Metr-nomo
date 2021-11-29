@@ -22,7 +22,9 @@ export default function App() {
   const [sound, setSound] = useState();
   const callSound = useRef(new Animated.Value(0)).current;
   const [playActive, setPlayActive] = useState(false);
-
+  
+  var width = Dimensions.get("window").width;
+  
   async function playBpmBeat() {
     const { sound } = await Audio.Sound.createAsync(
       require("./utils/sounds/tap.mp3")
@@ -41,7 +43,8 @@ export default function App() {
       : undefined;
   }, [sound,bpmValue]);
 
-  var width = Dimensions.get("window").width;
+
+ 
 
   const animation = Animated.loop(
     Animated.sequence([
