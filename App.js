@@ -20,10 +20,12 @@ export default function App() {
   const distance = useRef(new Animated.Value(0)).current;
   const [colorMark, setColorMark] = useState("#232E97");
   const [sound, setSound] = useState();
-  const callSound = useRef(new Animated.Value(0)).current;
+  var callSound = new Animated.Value(0);
   const [playActive, setPlayActive] = useState(false);
+  var position = useRef(false).current;
   
   var width = Dimensions.get("window").width;
+  let timer = (60*1000)/bpmValue;
   
   async function playBpmBeat() {
     const { sound } = await Audio.Sound.createAsync(
@@ -32,8 +34,6 @@ export default function App() {
     setSound(sound);
     await sound.playAsync();
   }
-
-
 
   useEffect(() => {
     return sound
@@ -50,29 +50,60 @@ export default function App() {
     Animated.sequence([
       Animated.timing(distance, {
         toValue: width * 0.8 - 25,
-        duration: (60 * 1000) / bpmValue,
+        duration: timer,
         useNativeDriver: false,
         easing: Easing.linear,
       }),
+      Animated.timing(callSound,{
+        toValue: 1,
+        duration: 0,
+        useNativeDriver: false
+      }),
       Animated.timing(distance, {
         toValue: 0,
-        duration: (60 * 1000) / bpmValue,
+        duration: timer,
         useNativeDriver: false,
         easing: Easing.linear,
+      }),
+      Animated.timing(callSound,{
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: false
       })
     ])
   );
 
+  // useEffect(()=>{
+  //   if(playActive){
+  //     if(callSound==1){
+  //       playBpmBeat();
+  //     } else if(callSound==0){
+  //       playBpmBeat();
+  //     }
+  //   }
+  // },[callSound]);
   
   useEffect(() => {
-    let timer = (60*1000)/bpmValue;
     if (playActive) {
-      clearInterval(soundTime);
+      clearInterval(soundTime)
+      soundTime = setInterval(()=>{
+        if(position){
+          position = !position;
+          if (parseInt(JSON.stringify(distance))>10){
+            animation.reset();
+            animation.start();
+          }
+        }else{
+          console.log('posicao final')
+          position= !position;
+        }
+        
+        playBpmBeat()},timer);
       animation.start();
-      soundTime = setInterval(playBpmBeat,timer);
+      
     } else {
       animation.reset();
-      clearInterval(soundTime);
+      clearInterval(soundTime)
     }
   }, [playActive, bpmValue]);
 
