@@ -4,18 +4,17 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 
-export default function ClickBar(){
-    const [ currentClicks, setCurrentClicks ] = useState(1);
-
+export default function ClickBar({bips, setBips}){
+   
     function decreaseClick(){
-        if(currentClicks!==1){
-            setCurrentClicks(currentClicks-1);
+        if(bips!==1){
+            setBips(bips-1);
 
         }
     }
 
     function addClick(){
-        setCurrentClicks(currentClicks+1);
+        setBips(bips+1);
     }
     return(
         <View style={styles.container}>
@@ -28,9 +27,9 @@ export default function ClickBar(){
                 </TouchableOpacity>
                 <View style={styles.clicksWrapper}>
 
-                    {currentClicks===1?<Text>  </Text>:(<Text style={styles.textClicks}>{(currentClicks-1)<10?'0'+(currentClicks-1):(currentClicks-1)}</Text>)}
-                    <Text style={styles.textClicks}>{currentClicks<10?'0'+currentClicks:currentClicks}</Text>
-                    <Text style={styles.textClicks}>{(currentClicks+1)<10?'0'+(currentClicks+1):(currentClicks+1)}</Text>
+                    {bips===1?<Text>  </Text>:(<Text style={styles.textClicks}>{(bips-1)<10?'0'+(bips-1):(bips-1)}</Text>)}
+                    <Text style={styles.textClicks}>{bips<10?'0'+bips:bips}</Text>
+                    <Text style={styles.textClicks}>{(bips+1)<10?'0'+(bips+1):(bips+1)}</Text>
                 </View>
                 <TouchableOpacity onPress={addClick}>
                     <View style={styles.boxAction}><Text style={styles.textBoxAction}>+</Text></View>

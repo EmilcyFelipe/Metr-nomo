@@ -14,14 +14,16 @@ import { Audio } from "expo-av";
 import { AntDesign } from "@expo/vector-icons";
 
 let soundTime=null;
+let soundBip = null;
 
 export default function App() {
   const [bpmValue, setBpmValue] = useState(80);
   const distance = useRef(new Animated.Value(0)).current;
   const [colorMark, setColorMark] = useState("#232E97");
   const [sound, setSound] = useState();
-  var callSound = new Animated.Value(0);
   const [playActive, setPlayActive] = useState(false);
+  const [ bips, setBips ] = useState(1);
+
   var position = useRef(false).current;
   
   var width = Dimensions.get("window").width;
@@ -43,9 +45,7 @@ export default function App() {
       : undefined;
   }, [sound,bpmValue]);
 
-
  
-
   const animation = Animated.loop(
     Animated.sequence([
       Animated.timing(distance, {
@@ -54,58 +54,38 @@ export default function App() {
         useNativeDriver: false,
         easing: Easing.linear,
       }),
-      Animated.timing(callSound,{
-        toValue: 1,
-        duration: 0,
-        useNativeDriver: false
-      }),
       Animated.timing(distance, {
         toValue: 0,
         duration: timer,
         useNativeDriver: false,
         easing: Easing.linear,
       }),
-      Animated.timing(callSound,{
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: false
-      })
     ])
   );
-
-  // useEffect(()=>{
-  //   if(playActive){
-  //     if(callSound==1){
-  //       playBpmBeat();
-  //     } else if(callSound==0){
-  //       playBpmBeat();
-  //     }
-  //   }
-  // },[callSound]);
   
   useEffect(() => {
     if (playActive) {
       clearInterval(soundTime)
       soundTime = setInterval(()=>{
         if(position){
-          position = !position;
-          if (parseInt(JSON.stringify(distance))>10){
+          if (parseInt(JSON.stringify(distance))>20){
             animation.reset();
             animation.start();
           }
+          setColorMark('#232E97');
         }else{
-          console.log('posicao final')
-          position= !position;
+          setColorMark('#C62F00');
         }
-        
+        position= !position;
         playBpmBeat()},timer);
       animation.start();
       
     } else {
       animation.reset();
-      clearInterval(soundTime)
+      clearInterval(soundTime);
+      clearInterval(soundBip);
     }
-  }, [playActive, bpmValue]);
+  }, [playActive, bpmValue, bips]);
 
   return (
     <View style={styles.container}>
@@ -128,7 +108,7 @@ export default function App() {
       {/*-------Actions Section */}
       <View style={styleActions.container}>
         <View style={styleActions.beatWrapper}>
-          <ClickBar />
+          {false && <ClickBar bips={bips} setBips={setBips}/>}
         </View>
         <View style={styleActions.row}>
           <TouchableOpacity onPress={() => setBpmValue(bpmValue - 5)}>
@@ -243,6 +223,8 @@ const styleActions = StyleSheet.create({
     borderRadius: 90 / 2,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: '#000',
+    elevation: 5
   },
   textButton: {
     fontSize: 25,
