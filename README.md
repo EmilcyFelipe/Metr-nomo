@@ -5,7 +5,7 @@ This is a solution to a metronomo app that i decided to create
 ## Table of contents
 
 - [Overview](#overview)
-  - [The challenge](#the-challenge)
+  - [The Project](#the-project)
   - [Screenshot](#screenshot)
   - [Links](#links)
 - [My process](#my-process)
@@ -26,7 +26,7 @@ Users should be able to:
 - Get audio and visual effects 
 
 ### Screenshot
-![screenshot](https://github.com/EmilcyFelipe/Metr-nomo/blob/master/1638490250153.jpg)
+<img src="https://github.com/EmilcyFelipe/Metr-nomo/blob/master/1638490250153.jpg"  width="300px"/> <img src="https://github.com/EmilcyFelipe/Metr-nomo/blob/master/1638490250162.jpg"  width="300px"/> <img src="https://github.com/EmilcyFelipe/Metr-nomo/blob/master/1638490250167.jpg" width="300px"/>
 
 ### Links
 
@@ -51,7 +51,7 @@ Users should be able to:
 
 ### What I learned
 
-I could improve a lot my skills with Animated, Sound component of expo, and the its boundaries
+I could improve a lot of my skills with Animated, Sound component of expo, and the its boundaries
 
 ## Author
 
